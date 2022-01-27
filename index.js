@@ -3,7 +3,7 @@ const app = express();
 const cors = require("cors");
 const admin = require("firebase-admin");
 require("dotenv").config();
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 const port = process.env.PORT || 5000;
 
 const serviceAccount = require("./travel-web-application-418e8-firebase-adminsdk-y62wj-7b1de6864c (1).json");
@@ -43,7 +43,18 @@ async function run() {
 
     // travel-web-application-firebase-adminsdk.json
 
-    app.get("/blogs", async (req, res) => {});
+    app.get("/blogs", async (req, res) => {
+      const cursor = blogsCollection.find({});
+      const result = await cursor.toArray();
+      res.json(result);
+    });
+
+    app.get('/blogs/:id', async (req, res)=>{
+      const id = req.params.id;
+      const query = { _id: ObjectId(id)};
+      const result = await blogsCollection.findOne(query);
+      res.json(result);
+    });
 
     // added blogs in database
     app.post("/blogs", async (req, res) => {
