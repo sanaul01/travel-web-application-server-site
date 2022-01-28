@@ -41,12 +41,22 @@ async function run() {
     const blogsCollection = database.collection("blogs");
     const usersCollection = database.collection("users");
 
-    // travel-web-application-firebase-adminsdk.json
+   
 
     app.get("/blogs", async (req, res) => {
       const cursor = blogsCollection.find({});
-      const result = await cursor.toArray();
-      res.json(result);
+      const page  = req.query.page;
+      const size = parseInt(req.query.size);
+      let blogs;
+      const count = await cursor.count();
+      if(page){
+        blogs = await cursor.skip(page*size).limit(size).toArray();
+      }
+      else{
+        blogs = await cursor.toArray();
+    }
+      // const result = await cursor.toArray();
+      res.json({count, blogs});
     });
 
     app.get('/blogs/:id', async (req, res)=>{
