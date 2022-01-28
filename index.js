@@ -66,6 +66,27 @@ async function run() {
       res.json(result);
     });
 
+    app.put('/blogs/:id', async (req, res) =>{
+      const id = req.params.id;
+      const updateBlog = req.body;
+      const filter = { _id: ObjectId(id)};
+      const options = { upsert: true };
+      const updateDoc = { 
+        $set: {
+          image: updateBlog.image,
+          title: updateBlog.title,
+          info: updateBlog.info,
+          description: updateBlog.description,
+          category: updateBlog.category, 
+          location: updateBlog.location,
+          cost: updateBlog.cost, 
+        } };
+      const result = await blogsCollection.updateOne(filter, options, updateDoc);
+      console.log(result)
+      res.json(result)
+
+    })
+
     // added blogs in database
     app.post("/blogs", async (req, res) => {
       const blog = req.body;
