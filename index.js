@@ -6,7 +6,7 @@ require("dotenv").config();
 const { MongoClient, ObjectId } = require("mongodb");
 const port = process.env.PORT || 5000;
 
-const serviceAccount = require("./travel-web-application-418e8-firebase-adminsdk-y62wj-7b1de6864c (1).json");
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
